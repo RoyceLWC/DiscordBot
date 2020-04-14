@@ -69,8 +69,7 @@ cog_count = 0
 cog_status = {
     "fun": False,
     "moderation": False,
-    "utility": False,
-    "music": False
+    "utility": False
 }
 
 # Hello Alternatives
@@ -97,8 +96,6 @@ async def cogs(ctx):
 
     for filename in os.listdir("./cogs"):
         cogs.append(filename)
-
-    print(cogs)
 
     await ctx.send(f"""
     ```
@@ -128,10 +125,10 @@ async def load(ctx, extension):
         for filename in os.listdir("./cogs")[
                         0:len(os.listdir("./cogs")) - 1]:  # Load all except the last file (__pycach)
 
-            if not cog_status[filename[:-3]]:
+            if cog_status[filename[:-3]] == False:
                 client.load_extension(f"cogs.{filename[:-3]}")
                 cog_count += 1  # Add 1 (total) to the cog count to indicate how many cogs have been loaded.
-            elif cog_status[filename[:-3]]:
+            elif cog_status[filename[:-3]] == True:
                 continue
             else:
                 continue
@@ -203,11 +200,11 @@ async def unload(ctx, extension):
         for filename in os.listdir("./cogs")[
                         0:len(os.listdir("./cogs")) - 1]:  # Unload all except the last file (__pycach)
 
-            if cog_status[filename[:-3]]:  # Search dictionary with the filename without .py as the key (rather than
-                # looping through dictionary).
+            if cog_status[filename[
+                          :-3]] == True:  # Search dictionary with the filename without .py as the key (rather than looping through dictionary).
                 client.unload_extension(f"cogs.{filename[:-3]}")
                 cog_count -= 1  # Add 1 (total) to the cog count to indicate how many cogs have been loaded.
-            elif not cog_status[filename[:-3]]:
+            elif cog_status[filename[:-3]] == False:
                 continue
             else:
                 continue
@@ -281,7 +278,7 @@ async def nhelp(ctx, cog="all"):
     help_embed.set_thumbnail(url=client.user.avatar_url)
     help_embed.set_footer(
         text=f"Requested by {ctx.message.author.name}",
-        icon_url=ctx.message.author.avatar_url  # client.user.avatar_url (for bot icon).
+        icon_url=client.user.avatar_url
     )
 
     # Get a list of all cogs
@@ -442,9 +439,9 @@ async def on_ready():
     print()
 
     for cog in cog_status:
-        if not cog_status[cog]:
+        if cog_status[cog] == False:
             cog_stat = "Unloaded"
-        elif cog_status[cog]:
+        elif cog_status[cog] == True:
             cog_stat = "Loaded"
         else:
             continue
