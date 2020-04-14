@@ -36,12 +36,12 @@ colours = {
 }
 
 try:  # See if there is already a pre-existing prefix file.
-    with open("prefix.txt", "r") as botprefix:
-        PREFIX = botprefix.readlines()[0]
-except:  # If not, create one with a given prefix from the prompt.
-    with open("prefix.txt", "w") as setprefix:
+    with open("prefix.txt", "r") as bot_prefix:
+        PREFIX = bot_prefix.readlines()[0]
+except FileNotFoundError:  # If not, create one with a given prefix from the prompt.
+    with open("prefix.txt", "w") as set_prefix:
         PREFIX = input("Please enter a prefix: ")
-        setprefix.write(PREFIX)
+        set_prefix.write(PREFIX)
 
 client = discord.Client()
 client = Bot(command_prefix=PREFIX)
@@ -50,17 +50,17 @@ client = Bot(command_prefix=PREFIX)
 @client.command(
     brief=f"Changes the current prefix `{PREFIX}`")  # Brief is the command descriptor displayed, whereas description
 # is the full description displayed after specified command.
-async def prefix(ctx, *, prefix):
+async def prefix(ctx, *, pref):
     global PREFIX
 
-    with open("prefix.txt", "w") as newprefix:
-        newprefix.write(prefix)
+    with open("prefix.txt", "w") as new_prefix:
+        new_prefix.write(pref)
 
-    PREFIX = prefix
+    PREFIX = pref
 
     client.command_prefix = PREFIX  # Change the prefix (update).
 
-    await ctx.send(f"Prefix has been changed to `{prefix}`.")
+    await ctx.send(f"Prefix has been changed to `{pref}`.")
 
 
 cog_count = 0
@@ -69,7 +69,8 @@ cog_count = 0
 cog_status = {
     "fun": False,
     "moderation": False,
-    "utility": False
+    "utility": False,
+    "music": False
 }
 
 # Hello Alternatives
@@ -85,24 +86,24 @@ def is_me():  # Creates a function decorator "@is_me()" that acts as a check().
 
 @client.command(brief="Shows the number of users on the server")
 async def users(ctx):
-    id = client.get_guild(626436080672964628)
+    server_id = client.get_guild(626436080672964628)
 
-    await ctx.send(f"""```nimrod\nTotal Users: {id.member_count}```""")
+    await ctx.send(f"""```nimrod\nTotal Users: {server_id.member_count}```""")
 
 
 @client.command(brief="Shows available cogs")
 async def cogs(ctx):
-    cogs = []
+    cogs_list = []
 
     for filename in os.listdir("./cogs"):
-        cogs.append(filename)
+        cogs_list.append(filename)
 
     await ctx.send(f"""
     ```
 Cogs available:```
     """)
 
-    for file in cogs[0:len(cogs) - 1]:  # Remove __pycach in the list index
+    for file in cogs_list[0:len(cogs_list)-1]:  # Remove __pycach in the list index
         await ctx.send(f"`{file[:-3]}`")  # Index slicing to remove .py
 
 
@@ -123,12 +124,12 @@ async def load(ctx, extension):
 
         # Go to the /cogs directory and load each one.
         for filename in os.listdir("./cogs")[
-                        0:len(os.listdir("./cogs")) - 1]:  # Load all except the last file (__pycach)
+                        0:len(os.listdir("./cogs"))-1]:  # Load all except the last file (__pycach)
 
-            if cog_status[filename[:-3]] == False:
+            if not cog_status[filename[:-3]]:
                 client.load_extension(f"cogs.{filename[:-3]}")
                 cog_count += 1  # Add 1 (total) to the cog count to indicate how many cogs have been loaded.
-            elif cog_status[filename[:-3]] == True:
+            elif cog_status[filename[:-3]]:
                 continue
             else:
                 continue
@@ -147,9 +148,9 @@ async def load(ctx, extension):
         print()
 
         for cog in cog_status:
-            if cog_status[cog] == False:
+            if not cog_status[cog]:
                 cog_stat = "Unloaded"
-            elif cog_status[cog] == True:
+            elif cog_status[cog]:
                 cog_stat = "Loaded"
             else:
                 continue
@@ -174,9 +175,9 @@ async def load(ctx, extension):
         print()
 
         for cog in cog_status:
-            if cog_status[cog] == False:
+            if not cog_status[cog]:
                 cog_stat = "Unloaded"
-            elif cog_status[cog] == True:
+            elif cog_status[cog]:
                 cog_stat = "Loaded"
             else:
                 break
@@ -201,10 +202,11 @@ async def unload(ctx, extension):
                         0:len(os.listdir("./cogs")) - 1]:  # Unload all except the last file (__pycach)
 
             if cog_status[filename[
-                          :-3]] == True:  # Search dictionary with the filename without .py as the key (rather than looping through dictionary).
+                          :-3]]:  # Search dictionary with the filename without .py as the key (rather than looping
+                # through dictionary).
                 client.unload_extension(f"cogs.{filename[:-3]}")
                 cog_count -= 1  # Add 1 (total) to the cog count to indicate how many cogs have been loaded.
-            elif cog_status[filename[:-3]] == False:
+            elif not cog_status[filename[:-3]]:
                 continue
             else:
                 continue
@@ -223,9 +225,9 @@ async def unload(ctx, extension):
         print()
 
         for cog in cog_status:
-            if cog_status[cog] == False:
+            if not cog_status[cog]:
                 cog_stat = "Unloaded"
-            elif cog_status[cog] == True:
+            elif cog_status[cog]:
                 cog_stat = "Loaded"
             else:
                 continue
@@ -282,10 +284,10 @@ async def nhelp(ctx, cog="all"):
     )
 
     # Get a list of all cogs
-    cogs = []
+    cogs_list = []
 
-    for filename in os.listdir("./cogs")[0:len(cogs) - 1]:
-        cogs.append(filename)
+    for filename in os.listdir("./cogs")[0:len(cogs_list) - 1]:
+        cogs_list.append(filename)
 
     if cog == "all":
 
@@ -294,12 +296,12 @@ async def nhelp(ctx, cog="all"):
         # General commands
 
         try:
-            for c in cogs:
+            for c in cogs_list:
                 cog_commands = client.get_cog(c[:-3]).get_commands()
 
-                for cogname in cog_commands:  # Loop through each object command and append the name of the command.
-                    all_cog_commands.append(cogname.name)
-        except:
+                for cog_name in cog_commands:  # Loop through each object command and append the name of the command.
+                    all_cog_commands.append(cog_name.name)
+        except FileNotFoundError:
             pass
 
         general_commands = ""
@@ -318,7 +320,7 @@ async def nhelp(ctx, cog="all"):
             inline=False
         )
 
-        for cog in cogs:
+        for cog in cogs_list:
 
             try:
                 # Get a list of all commands under each cog
@@ -337,7 +339,7 @@ async def nhelp(ctx, cog="all"):
                 # name = "\u200b", value = "\u200b", inline = False -- Add a whitespace character (blank field).
                 # )
 
-            except:
+            except AttributeError:
                 pass
 
         # Extra info
@@ -353,20 +355,22 @@ async def nhelp(ctx, cog="all"):
     else:  # Cog specified...
 
         try:
-            lower_cogs = [cog.lower() for cog in cogs]
+            lower_cogs = [cog.lower() for cog in cogs_list]
             lower_cogs_py = [x[:-3] for x in lower_cogs]  # Get rid of .py (separately).
 
             if cog.lower() in lower_cogs_py:  # Check if cog exists.
 
                 commands_list = client.get_cog(lower_cogs_py[lower_cogs.index(
-                    cog.lower() + ".py")]).get_commands()  # Cog must be loaded and index referenced must have full file name.
+                    cog.lower() + ".py")]).get_commands()  # Cog must be loaded and index referenced must have full
+                # file name.
                 help_text = ""
 
                 for command in commands_list:
                     help_text += f"`{command.name}`\n*{command.description}*\n"
 
                     # Formatting of command
-                    help_text += f"**Format: ** `{PREFIX}{command.name} {command.usage if command.usage is not None else ''}`\n"  # Name/usage under command via the decorator (paraneters) - Return blank if no usage given.
+                    help_text += f"**Format: ** `{PREFIX}{command.name} {command.usage if command.usage is not None else ''}`\n"
+                    # Name/usage under command via the decorator (parameters) - Return blank if no usage given.
 
                     # If there are aliases, add them
                     if len(command.aliases) > 0:
@@ -379,8 +383,8 @@ async def nhelp(ctx, cog="all"):
                 await ctx.send(embed=help_embed)
 
             else:
-                await ctx.send("Invalid cog specified.\nUse `?cogs` to view the avaiable cogs.")
-        except:
+                await ctx.send("Invalid cog specified.\nUse `?cogs` to view the available cogs.")
+        except AttributeError:
             await ctx.send("Make sure the cog is loaded first!")
 
 
@@ -439,9 +443,9 @@ async def on_ready():
     print()
 
     for cog in cog_status:
-        if cog_status[cog] == False:
+        if not cog_status[cog]:
             cog_stat = "Unloaded"
-        elif cog_status[cog] == True:
+        elif cog_status[cog]:
             cog_stat = "Loaded"
         else:
             continue

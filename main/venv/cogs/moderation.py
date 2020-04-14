@@ -142,10 +142,6 @@ class Moderation(commands.Cog, name="moderation"):
         if message.author.id in mute_ids and muted == True:
             await message.delete()
 
-        if message.author.id in mute_ids:
-            sentid = message.author.id
-            await sentid.edit(mute=True)
-
 
 def setup(client):
     client.add_cog(Moderation(client))
