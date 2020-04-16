@@ -93,18 +93,44 @@ async def users(ctx):
 
 @client.command(brief="Shows available cogs")
 async def cogs(ctx):
+    # Get a list of all cogs
     cogs_list = []
 
-    for filename in os.listdir("./cogs"):
+    for filename in os.listdir("./cogs")[0:len(cogs_list) - 1]:
+        filename = filename[:-3]  # Index slicing to remove .py
         cogs_list.append(filename)
 
-    await ctx.send(f"""
-    ```
-Cogs available:```
-    """)
+    cogs_embed = discord.Embed(
+        title=f"Cogs",  # Specified cog title (or general).
+        colour=colours["BLURPLE"]
+    )
+    cogs_embed.set_thumbnail(url=client.user.avatar_url)
+    cogs_embed.set_footer(
+        text=f"Requested by {ctx.message.author.name}",
+        icon_url=client.user.avatar_url
+    )
 
-    for file in cogs_list[0:len(cogs_list)-1]:  # Remove __pycach in the list index
-        await ctx.send(f"`{file[:-3]}`")  # Index slicing to remove .py
+    cogs_available = ""
+
+    for cog in cogs_list:
+        cogs_available += f"`{cog}`\n"
+
+    cogs_embed.add_field(
+        name="Available cogs:",
+        value=cogs_available,
+        inline=False
+    )
+    extra_help = discord.Embed(
+        color=colours["BLURPLE"]
+    )
+    extra_help.add_field(
+        name="To view each cog's commands, load the cog first and use:",
+        value="`?nhelp [cog].`",
+        inline=False
+    )
+
+    await ctx.send(embed=cogs_embed)
+    await ctx.send(embed=extra_help)
 
 
 @client.command(brief="Loads cogs")
@@ -124,15 +150,18 @@ async def load(ctx, extension):
 
         # Go to the /cogs directory and load each one.
         for filename in os.listdir("./cogs")[
-                        0:len(os.listdir("./cogs"))-1]:  # Load all except the last file (__pycach)
+                        0:len(os.listdir("./cogs")) - 1]:  # Load all except the last file (__pycach)
 
-            if not cog_status[filename[:-3]]:
-                client.load_extension(f"cogs.{filename[:-3]}")
-                cog_count += 1  # Add 1 (total) to the cog count to indicate how many cogs have been loaded.
-            elif cog_status[filename[:-3]]:
-                continue
+            if filename.startswith("song"):
+                pass
             else:
-                continue
+                if not cog_status[filename[:-3]]:
+                    client.load_extension(f"cogs.{filename[:-3]}")
+                    cog_count += 1  # Add 1 (total) to the cog count to indicate how many cogs have been loaded.
+                elif cog_status[filename[:-3]]:
+                    continue
+                else:
+                    continue
 
         # Loop through each value and set it to True (loaded).
         for cog in cog_status:
@@ -159,32 +188,38 @@ async def load(ctx, extension):
 
         print("-" * 30)
     else:
-        client.load_extension(f"cogs.{extension}")
-        await ctx.send(f"`{extension}` cog has been loaded.")
-        cog_count += 1
+        try:
+            client.load_extension(f"cogs.{extension}")
+            await ctx.send(f"`{extension}` cog has been loaded.")
+            cog_count += 1
 
-        cog_status[extension] = True  # Set the cog's value to True (loaded)
+            cog_status[extension] = True  # Set the cog's value to True (loaded)
 
-        print("-" * 30)
-        print("Bot Name: " + client.user.name)
-        print("Bot ID: " + str(client.user.id))
-        print(f"Prefix: {PREFIX}")
-        print("-" * 30)
-        print(f"Cogs loaded: {cog_count}")
-        print("Cog Status:")
-        print()
+            print("-" * 30)
+            print("Bot Name: " + client.user.name)
+            print("Bot ID: " + str(client.user.id))
+            print(f"Prefix: {PREFIX}")
+            print("-" * 30)
+            print(f"Cogs loaded: {cog_count}")
+            print("Cog Status:")
+            print()
 
-        for cog in cog_status:
-            if not cog_status[cog]:
-                cog_stat = "Unloaded"
-            elif cog_status[cog]:
-                cog_stat = "Loaded"
+            for cog in cog_status:
+                if not cog_status[cog]:
+                    cog_stat = "Unloaded"
+                elif cog_status[cog]:
+                    cog_stat = "Loaded"
+                else:
+                    break
+
+                print(cog, "-", cog_stat)
+
+            print("-" * 30)
+        except:
+            if extension in cog_status:
+                await ctx.send(f"`{extension}` has already been loaded!")
             else:
-                break
-
-            print(cog, "-", cog_stat)
-
-        print("-" * 30)
+                await ctx.send("`Invalid cog!`")
 
 
 @client.command(brief="Unloads cogs")
@@ -236,32 +271,38 @@ async def unload(ctx, extension):
 
         print("-" * 30)
     else:
-        client.unload_extension(f"cogs.{extension}")
-        await ctx.send(f"`{extension}` cog has been unloaded.")
-        cog_count -= 1
+        try:
+            client.unload_extension(f"cogs.{extension}")
+            await ctx.send(f"`{extension}` cog has been unloaded.")
+            cog_count -= 1
 
-        cog_status[extension] = False  # Set the cog's value to False (unloaded).
+            cog_status[extension] = False  # Set the cog's value to False (unloaded).
 
-        print("-" * 30)
-        print("Bot Name: " + client.user.name)
-        print("Bot ID: " + str(client.user.id))
-        print(f"Prefix: {PREFIX}")
-        print("-" * 30)
-        print(f"Cogs loaded: {cog_count}")
-        print("Cog Status:")
-        print()
+            print("-" * 30)
+            print("Bot Name: " + client.user.name)
+            print("Bot ID: " + str(client.user.id))
+            print(f"Prefix: {PREFIX}")
+            print("-" * 30)
+            print(f"Cogs loaded: {cog_count}")
+            print("Cog Status:")
+            print()
 
-        for cog in cog_status:
-            if not cog_status[cog]:
-                cog_stat = "Unloaded"
-            elif cog_status[cog]:
-                cog_stat = "Loaded"
+            for cog in cog_status:
+                if not cog_status[cog]:
+                    cog_stat = "Unloaded"
+                elif cog_status[cog]:
+                    cog_stat = "Loaded"
+                else:
+                    continue
+
+                print(cog, "-", cog_stat)
+
+            print("-" * 30)
+        except:
+            if extension in cog_status:
+                await ctx.send(f"`{extension}` has already been unloaded.")
             else:
-                continue
-
-            print(cog, "-", cog_stat)
-
-        print("-" * 30)
+                await ctx.send("`Invalid cog!`")
 
 
 # Help (Embed)
@@ -301,7 +342,7 @@ async def nhelp(ctx, cog="all"):
 
                 for cog_name in cog_commands:  # Loop through each object command and append the name of the command.
                     all_cog_commands.append(cog_name.name)
-        except FileNotFoundError:
+        except AttributeError:
             pass
 
         general_commands = ""
@@ -385,7 +426,7 @@ async def nhelp(ctx, cog="all"):
             else:
                 await ctx.send("Invalid cog specified.\nUse `?cogs` to view the available cogs.")
         except AttributeError:
-            await ctx.send("Make sure the cog is loaded first!")
+            await ctx.send("`Make sure the cog is loaded first!`")
 
 
 # Confirmation of login.

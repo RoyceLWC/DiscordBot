@@ -8,11 +8,21 @@
       <w>hola</w>
       <w>jlzrb</w>
       <w>mutedids</w>
+      <w>muteduser</w>
       <w>nhelp</w>
+      <w>nmutes</w>
       <w>postprocessors</w>
       <w>preferredcodec</w>
       <w>preferredquality</w>
       <w>pycach</w>
+      <w>shutil</w>
+      <w>unmuted</w>
+      <w>unmutes</w>
+      <w>unmuting</w>
+      <w>vcmute</w>
+      <w>venv</w>
+      <w>viewqueue</w>
+      <w>webm</w>
     </words>
   </dictionary>
 </component>
