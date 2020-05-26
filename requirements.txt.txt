@@ -1,0 +1,7 @@
+git+https://github.com/Rapptz/discord.py@rewrite
+PyNaCl
+async-timeout==3.0.1
+ffmpeg
+opuslib
+youtube-dl==2020.3.24
+dnspython==1.16.0

@@ -443,6 +443,19 @@ async def on_message(message):
     # The default on_message contains a call to this coroutine, but when you override it with your own on_message,
     # you need to call it yourself.
 
+    if message.content.startswith("https://tenor.com/view/safety-carlton-f1-formula1-safety-car-gif-15165330"):
+        await message.delete()
+        gif_embed = discord.Embed(
+            colour=colours['GOLD']
+        )
+
+        gif_embed.set_image(
+            url="https://media1.tenor.com/images/984b364e0ec65b14272d95533a32ef16/tenor.gif?itemid=15165330"
+        )
+
+        await message.channel.send(embed=gif_embed)
+
+
 
 @client.event
 async def on_member_join(member):  # Event will run when a member joins the server.
