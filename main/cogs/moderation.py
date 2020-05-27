@@ -4,7 +4,16 @@ from discord.ext.commands import Bot
 
 client = discord.Client()
 # noinspection PyRedeclaration
-client = Bot(command_prefix="?")
+
+try:  # See if there is already a pre-existing prefix file.
+    with open("prefix.txt", "r") as bot_prefix:
+        PREFIX = bot_prefix.readlines()[0]
+except FileNotFoundError:  # If not, create one with a given prefix from the prompt.
+    with open("prefix.txt", "w") as set_prefix:
+        PREFIX = input("Please enter a prefix: ")
+        set_prefix.write(PREFIX)
+
+client = Bot(command_prefix=PREFIX)
 
 id_check = False
 

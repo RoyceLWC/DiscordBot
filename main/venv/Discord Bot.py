@@ -334,16 +334,16 @@ async def nhelp(ctx, cog="all"):
 
         all_cog_commands = []
 
-        # General commands
-
-        try:
-            for c in cogs_list:
-                cog_commands = client.get_cog(c[:-3]).get_commands()
+        for cog in cogs_list: # Loop through each cog (outside of the try statement to exclude other unloaded cogs).
+            try:
+                cog_commands = client.get_cog(cog[:-3]).get_commands()
 
                 for cog_name in cog_commands:  # Loop through each object command and append the name of the command.
                     all_cog_commands.append(cog_name.name)
-        except AttributeError:
-            pass
+            except AttributeError:
+                pass
+
+        # General commands
 
         general_commands = ""
         for command in client.commands:
