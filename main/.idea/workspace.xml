@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bbfced02-6a70-49b3-96da-1142f027360b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DiscordBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/DiscordBot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/fun.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/fun.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/moderation.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/moderation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/music.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/music.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/utility.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/utility.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/song.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/song.mp3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/Discord Bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Discord Bot.py" afterDir="false" />
-    </list>
+    <list default="true" id="bbfced02-6a70-49b3-96da-1142f027360b" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +90,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cogs/fun.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
+            <state relative-caret-position="-680">
               <caret column="13" lean-forward="true" selection-start-column="13" selection-end-column="13" />
             </state>
           </provider>
@@ -404,12 +395,12 @@
       <workItem from="1590356527804" duration="1385000" />
       <workItem from="1590530094657" duration="464000" />
       <workItem from="1590530931116" duration="1922000" />
-      <workItem from="1590538761287" duration="4172000" />
+      <workItem from="1590538761287" duration="4514000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="132102000" />
+    <option name="totallyTimeSpent" value="132444000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
@@ -588,7 +579,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cogs/fun.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
+        <state relative-caret-position="-680">
           <caret column="13" lean-forward="true" selection-start-column="13" selection-end-column="13" />
         </state>
       </provider>
