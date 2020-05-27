@@ -7,8 +7,6 @@ client = discord.Client()
 client = Bot(command_prefix="?")
 
 id_check = False
-muted = False
-muteduser = ""
 
 
 def is_me():  # Creates a function decorator "@is_me()" that acts as a check().
@@ -52,85 +50,120 @@ class Moderation(commands.Cog, name="moderation"):
                     usage="[user]")
     @is_me()
     async def vcmute(self, ctx, user: discord.Member):
-        muterole = discord.utils.get(user.guild.roles, name="Muted")
-        await user.add_roles(muterole)
+        muted_role = discord.utils.get(user.guild.roles, name="Muted")
+        await user.add_roles(muted_role)
         await ctx.send(f"`{user} has been muted.`")
 
     # Muting a user
     @commands.command(brief="Mutes an individual", description="Mutes a user via chat.", usage="[user] <reason>")
     @is_me()
-    async def mute(self, ctx, user: discord.Member, *, reason="None"):
+    async def mute(self, ctx, user: discord.Member = None, *, reason="None"):
 
-        if user.id == 695366037469921454:
-            await ctx.send("You can't mute me!")
+        already_muted = False
+
+        if user:
+            if user.id == 695366037469921454:
+                await ctx.send("You can't mute me!")
+            else:
+                muteduser_id = str(user.id)
+
+                with open("mutes.txt", "r") as check:  # First check to see if the user hasn't already been muted.
+
+                    lines = check.readlines()
+
+                    for line in lines:
+                        if muteduser_id in line:
+                            already_muted = True
+                            await ctx.send(f"`{user} has already been muted.`")
+
+                if not already_muted:
+                    try:
+                        with open("mutes.txt", "a", encoding="utf-8") as new_entry:
+
+                            new_entry.write(
+                                f"User: {user}\nID: {muteduser_id}\nReason: {reason}\n")  # [3:len(muteduser_id)-1] for <@!>
+                            # if present.
+                            new_entry.write("-" * 30 + "\n")
+                    except FileNotFoundError:
+                        with open("mutes.txt", "w", encoding="utf-8") as new_entry:
+                            new_entry.write(f"User: {user}\nID: {muteduser_id}\nReason: {reason}\n")
+                            new_entry.write("-" * 30 + "\n")
+
+                    try:
+                        with open("mutedids.txt", "a", encoding="utf-8") as new_entry:
+                            new_entry.write(muteduser_id + "\n")
+                    except FileNotFoundError:
+                        with open("mutedids.txt", "w", encoding="utf-8") as new_entry:
+                            new_entry.write(muteduser_id + "\n")
+
+                    await ctx.send(f"`{user} has been muted.`")
+                else:
+                    print("User already muted.")
         else:
-            muteduser_id = str(user.id)
-
-            try:
-                with open("mutes.txt", "a", encoding="utf-8") as newentry:
-                    newentry.write(
-                        f"User: {user}\nID: {muteduser_id}\nReason: {reason}\n")  # [3:len(muteduser_id)-1] for <@!>
-                    # if present.
-                    newentry.write("-" * 30 + "\n")
-            except:
-                with open("mutes.txt", "w", encoding="utf-8") as newentry:
-                    newentry.write(f"User: {user}\nID: {muteduser_id}\nReason: {reason}\n")
-                    newentry.write("-" * 30 + "\n")
-
-            try:
-                with open("mutedids.txt", "a", encoding="utf-8") as newentry:
-                    newentry.write(muteduser_id + "\n")
-            except:
-                with open("mutedids.txt", "w", encoding="utf-8") as newentry:
-                    newentry.write(muteduser_id + "\n")
-
-            global muted
-            muted = True
-
-            global muteduser
-            muteduser = user.id
-
-            await ctx.send(f"`{user} has been muted.`")
+            await ctx.send("`Invalid user!`")
 
     # Un-muting a user
     @commands.command(brief="Unmutes an individual", description="Unmutes a user via chat.", usage="[user] <reason>")
     @is_me()
-    async def unmute(self, ctx, user: discord.Member, *, reason="None"):
+    async def unmute(self, ctx, user: discord.Member):
 
-        global muted
-        muted = False
+        with open("mutedids.txt", "r") as unmuting:
+            ids = unmuting.readlines()
+            muted_id = ""
 
-        global muteduser
-        muteduser = user.id
+            for line in ids:
+                if str(user.id) == line[:-1]:
+                    muted_id = str(user.id)
 
-        await ctx.send(f"`{user} has been unmuted.`")
+        with open("mutedids.txt", "w") as unmuting:  # Write the file separately.
+
+            if muted_id == "":  # If the ID isn't in "mutedids.txt", do 'nothing'.
+                await ctx.send(f"`{user} has not been muted.`")
+                for line in ids:
+                    unmuting.write(line)  # Write the whole file again as usual.
+            else:
+                for line in ids:
+                    if str(line[:-1]) != muted_id:
+                        unmuting.write(line)
+
+                await ctx.send(f"`{user} has been unmuted.`")
+
+        with open('mutes.txt', "r") as unmuting:  # Create separate reading for "mutes.txt".
+            m_ids = unmuting.readlines()
+            muted_user = ""
+
+            for sec in m_ids:
+                if str(user) in sec:
+                    muted_user = str(user)
+
+        with open("mutes.txt", "w") as unmuting:  # Write the file with previously read lines.
+
+            if muted_user == "":
+                for line in m_ids:
+                    unmuting.write(line)
+            else:
+                for line in m_ids[::4]:  # Loop through every fourth line to check the starting line of the report.
+                    if str(muted_user) in line:  # If the user tag is in the file, 'delete' it by skipping through.
+                        continue
+                    else:
+                        index = m_ids.index(line)
+                        for section in m_ids[index:index+4]:  # Write the whole section [index:index+4] - 4 lines.
+                            unmuting.write(section)
 
     @commands.Cog.listener()
     async def on_message(self, message):
 
-        global muted
-        global muteduser
         global mute_ids
 
-        with open("mutedids.txt", "r") as readmutes:
+        with open("mutedids.txt", "r") as read_mutes:
             mute_ids = []
 
-            nmutes = readmutes.readlines()
+            nmutes = read_mutes.readlines()
 
-            for id in nmutes:
-                id = int(id[0:len(id) - 1])  # Get rid of the new line in the text file and convert it to an integer.
-                mute_ids.append(id)  # Add it to the mute_ids list to be checked later.
-
-        tk_possibilities = ["tk", "tK", "TK", "Tk", "TeaKay", "teakay"]
-
-        for tk in tk_possibilities:
-            if message.content.startswith(tk):
-                await message.channel.send("<@297897016007196674> Lara poo poo")
-
-        if "krunker.io" in message.content:  # Checks to see if the given " " is in the message (rather than
-            # startswith).
-            await message.delete()
-            await message.channel.send("No.")
+            for mute_id in nmutes:
+                mute_id = int(mute_id[0:len(
+                    mute_id) - 1])  # Get rid of the new line in the text file and convert it to an integer.
+                mute_ids.append(mute_id)  # Add it to the mute_ids list to be checked later.
 
         if message.content.startswith("`__pycach`"):
             await message.delete()
@@ -139,12 +172,8 @@ class Moderation(commands.Cog, name="moderation"):
             # the response is validated.
             await message.channel.send("Royce's ID: 338406004356022283")
 
-        if message.author.id in mute_ids and muted == True:
-            await message.delete()
-
         if message.author.id in mute_ids:
-            sentid = message.author.id
-            await sentid.edit(mute=True)
+            await message.delete()
 
 
 def setup(client):
