@@ -1,4 +1,5 @@
 import asyncio
+import json
 import os
 
 import discord
@@ -11,15 +12,18 @@ from discord.utils import get
 
 client = discord.Client()
 
-try:  # See if there is already a pre-existing prefix file.
-    with open("prefix.txt", "r") as bot_prefix:
-        PREFIX = bot_prefix.readlines()[0]
-except FileNotFoundError:  # If not, create one with a given prefix from the prompt.
-    with open("prefix.txt", "w") as set_prefix:
-        PREFIX = input("Please enter a prefix: ")
-        set_prefix.write(PREFIX)
 
-client = Bot(command_prefix=PREFIX)
+def get_prefix(client, message):
+    with open("prefixes.json", "r") as read:
+        r_prefixes = json.load(read)
+
+    return r_prefixes[str(message.guild.id)]
+
+
+client = Bot(command_prefix=get_prefix)
+
+with open("prefixes.json", "r") as f:
+    prefixes = json.load(f)
 
 players = {}
 queues = {}
@@ -70,7 +74,7 @@ class Music(commands.Cog, name="music"):
     @commands.command(brief="Plays music", description="Plays music received from YouTube.", usage="[url]",
                       aliases=["p"])
     async def play(self, ctx, url: str):
-        global name
+        global name, prefixes
 
         def check_queue():
             global left_in_queue
@@ -164,6 +168,7 @@ class Music(commands.Cog, name="music"):
 
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:  # Make it all to "ydl"
             await ctx.send("`Downloading audio...`")
+            # ydl.cache.remove()
             info_dict = ydl.extract_info(url, download=False)
             video_title = info_dict.get('title', None)
             ydl.download([url])  # Get the full URL ([])
@@ -176,7 +181,38 @@ class Music(commands.Cog, name="music"):
                 os.rename(file, "song.mp3")
 
         # Play song and send message when song has finished.
-        p_voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
+        try:
+            p_voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
+        except:
+
+            channel = ctx.message.author.voice.channel  # Gets the channel the user (author) is in.
+
+            error_embed = discord.Embed(  # Error embed
+                description="I am not in a voice channel!",
+                colour=0xe74c3c
+            )
+            error_embed.set_footer(text=f"Joining '{channel}' anyways...")
+
+            await ctx.send(embed=error_embed)
+
+            try:
+                global voice
+
+                voice = get(client.voice_clients, guild=ctx.guild)
+
+                if voice and voice.is_connected():  # If user is in a voice channel and bot is in a (different) channel, ...
+                    await voice.move_to(channel)  # Move to the channel the author is in.
+                else:
+                    voice = await channel.connect()  # Else, connect to the channel.
+                    print(f"The bot has connected to {channel}.\n")
+
+            except ClientException:
+                await ctx.send(
+                    f"I am already in a voice channel!")  # Correct this error to move to a different channel.
+
+            p_voice = ctx.guild.voice_client
+            p_voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
+
         p_voice.source = discord.PCMVolumeTransformer(p_voice.source)
         p_voice.source.volume = 0.1  # Sets the volume of the song.
 

@@ -1,21 +1,26 @@
+import asyncio
+import csv
+import json
+
 import discord
 from discord.ext import commands
-from discord.ext.commands import Bot
+from discord.ext.commands import Bot, has_permissions
 
 client = discord.Client()
 # noinspection PyRedeclaration
 
-try:  # See if there is already a pre-existing prefix file.
-    with open("prefix.txt", "r") as bot_prefix:
-        PREFIX = bot_prefix.readlines()[0]
-except FileNotFoundError:  # If not, create one with a given prefix from the prompt.
-    with open("prefix.txt", "w") as set_prefix:
-        PREFIX = input("Please enter a prefix: ")
-        set_prefix.write(PREFIX)
 
-client = Bot(command_prefix=PREFIX)
+def get_prefix(client, message):
+    with open("prefixes.json", "r") as read:
+        r_prefixes = json.load(read)
 
-id_check = False
+    return r_prefixes[str(message.guild.id)]
+
+
+client = Bot(command_prefix=get_prefix)
+
+with open("prefixes.json", "r") as f:
+    prefixes = json.load(f)
 
 
 def is_me():  # Creates a function decorator "@is_me()" that acts as a check().
@@ -30,7 +35,7 @@ class Moderation(commands.Cog, name="moderation"):
     def __init__(self, client):
         self.client = client
 
-    @client.command(description="Base command to show that the 'filter' is on.")
+    @commands.command(description="Base command to show that the 'filter' is on.")
     async def filter(self, ctx):
         """
         ON
@@ -38,25 +43,546 @@ class Moderation(commands.Cog, name="moderation"):
 
         await ctx.send("Filter: ON")
 
-    @client.command(brief="Royce's ID Check", description="Royce's temporary ID check switch command.",
-                    usage="[on/off]")
-    @is_me()
-    async def id(self, ctx, *, switch):  # Switch is the message after the command (either input on/off).
+    @commands.Cog.listener()
+    async def on_reaction_add(self, reaction, user):
+        pass
 
-        global id_check
+    @commands.command(brief="Creates and saves a list of your server's moderation team",
+                      description="Creates and saves a list of your server's moderation team [overwrites pre-existing lists].",
+                      aliases=["createmods", "cml"])
+    @has_permissions(manage_messages=True)  # Validate permissions of the user
+    async def createmodlist(self, ctx):
 
-        if switch == "on":
-            await ctx.send("Royce's ID: ON")
-            id_check = True  # If command is followed by "on", make id_check True (so that the ID_check executes).
+        global prefixes
+
+        # Local variable referencing
+        global admin_name, reacting, str_admins, mods_list, colour_hex
+
+        def check(react, user):  # Check if reacted to
+            return str(react.emoji) in reaction_emoji_list and user == ctx.message.author
+
+        def channel_check(m):  # Check if in channel
+            return m.channel == ctx.channel
+
+        # Setup team name - Embed
+        mod_embed = discord.Embed(
+            title="Initialising...",
+            colour=0x7289DA
+        )
+        mod_embed.add_field(
+            name="Setup",
+            value="Include Discord team name?",
+            inline=False
+        )
+
+        custom_embed = await ctx.send(embed=mod_embed)
+
+        await custom_embed.add_reaction(emoji='\U00002B06')  # Up-arrow reaction
+        await custom_embed.add_reaction(emoji='\U00002B07')  # Down-arrow reaction
+
+        reaction_emoji_list = ['\U00002B06', '\U00002B07']
+
+        # Team name section of embed (edit)
+        try:
+            reacting, confirm_user = await ctx.bot.wait_for('reaction_add', timeout=30.0, check=check)
+        except asyncio.TimeoutError:
+            await ctx.send("`Took too long! Neglecting team name response...`")  # If user takes too long - timeout.
+
+        if reacting.emoji == "\U00002B06":  # If the .emoji is the up-arrow...
+            mods_bool = True  # Make mods_bool True in order to implement mods to the embed.
+        elif reacting.emoji == '\U00002B07':
+            mods_bool = False
         else:
-            await ctx.send("Royce's ID: OFF")
-            id_check = False
+            mods_bool = False
 
-        return id_check
+        if mods_bool:
+            await ctx.send("`Enter your moderation team's name:`")
+
+            try:
+                team_name = await ctx.bot.wait_for('message', timeout=30.0, check=channel_check)
+                team_name = team_name.content
+            except asyncio.TimeoutError:
+                await ctx.send("`Took too long! Neglecting team name response...`")  # If user takes too long - timeout.
+                return
+        else:
+            team_name = None
+
+        # Custom Colour
+
+        mod_embed = discord.Embed(  # Initialise first mod_embed (setup).
+            title="Initialising...",
+            colour=0x7289DA
+        )
+        mod_embed.add_field(
+            name="Setup",
+            value="Custom embed colour?",
+            inline=False
+        )
+
+        await custom_embed.edit(embed=mod_embed)
+
+        try:
+            reacting, confirm_user = await ctx.bot.wait_for('reaction_add', timeout=10.0, check=check)
+        except asyncio.TimeoutError:
+            await ctx.send("`Took too long! Neglecting colour response...`")  # If user takes too long - timeout.
+        else:
+            print(reacting)
+
+        if reacting.emoji == "\U00002B06":  # If the .emoji is the up-arrow...
+            embed_colour = True  # Make admins_bool True in order to implement admins to the embed.
+        else:
+            embed_colour = False
+
+        if embed_colour:
+            await ctx.send("Enter the hex of the colour prefixed by `0x`:")
+            try:
+                colour_hex = await ctx.bot.wait_for('message', timeout=60.0)  # Receive colour hex.
+                colour_hex = int(colour_hex.content, 16)
+            except asyncio.TimeoutError:
+                await ctx.send("`Took too long! Neglecting custom colour response...`")
+        else:
+            colour_hex = None
+
+        # Setup admin section - Embed
+        mod_embed = discord.Embed(
+            title="Initialising...",
+            colour=0x7289DA
+        )
+        mod_embed.add_field(
+            name="Setup",
+            value="Include admin team?",
+            inline=False
+        )
+        await custom_embed.edit(embed=mod_embed)
+
+        try:  # Check if custom hex is valid.
+            if team_name is not None:
+                final_mod_embed = discord.Embed(
+                    title=team_name,
+                    colour=discord.Colour(colour_hex)
+                )
+            else:
+                final_mod_embed = discord.Embed(
+                    title="Discord Moderation Team",
+                    colour=discord.Colour(colour_hex)
+                )
+        except:  # Default colour
+            if team_name is not None:
+                final_mod_embed = discord.Embed(
+                    title=team_name,
+                    colour=0x7289DA
+                )
+            else:
+                final_mod_embed = discord.Embed(
+                    title="Discord Moderation Team",
+                    colour=0x7289DA
+                )
+
+        # Admin section of embed
+        try:
+            reacting, confirm_user = await ctx.bot.wait_for('reaction_add', timeout=10.0, check=check)
+        except asyncio.TimeoutError:
+            await ctx.send("`Took too long! Neglecting admin response...`")  # If user takes too long - timeout.
+        else:
+            pass
+
+        if reacting.emoji == "\U00002B06":  # If the .emoji is the up-arrow...
+            admins_bool = True  # Make admins_bool True in order to implement admins to the embed.
+        else:
+            admins_bool = False
+
+        if admins_bool:  # If admins need to be included.
+            await ctx.send("`Mention a list of the current server admins - delimited by commas.`")
+            try:
+                admins_list = await ctx.bot.wait_for('message', timeout=30.0,
+                                                     check=channel_check)  # Receive list of admins.
+
+                try:
+                    admins_list = [x.strip() for x in admins_list.content.split(",")]  # Split the message via the commas and strip whitespaces - create a list.
+                    print(admins_list)
+                except:
+                    await ctx.send("`Error! Please try again.`")
+                    return
+
+                await ctx.send(
+                    "`Is there a specific name for the team? [Y/N]`")  # Prompt for a specific admin team name.
+
+                admin_name = await ctx.bot.wait_for('message', timeout=30.0, check=channel_check)
+
+                if "y" in admin_name.content.lower():
+                    await ctx.send("`Enter the name of the admin team:`")
+                    admin_name = await ctx.bot.wait_for('message', timeout=30.0, check=channel_check)
+                    admin_name = admin_name.content
+                else:
+                    admin_name = "Admins"
+
+                str_admins = ""
+
+                for admin in admins_list:
+                    str_admins += f"{admin}\n"
+
+                final_mod_embed.add_field(  # Add the admin embed section.
+                    name=admin_name,
+                    value=str_admins,
+                    inline=False
+                )
+            except asyncio.TimeoutError:
+                await ctx.send("`Took too long! Neglecting admin response...`")  # If user takes too long - timeout.
+        else:
+            admin_name = None  # Mark that there is no admin section to be displayed.
+            str_admins = None
+
+        # Setup mod section - Embed
+        mod_embed = discord.Embed(
+            title="Initialising...",
+            colour=0x7289DA
+        )
+        mod_embed.add_field(
+            name="Setup",
+            value="Include mod team?",
+            inline=False
+        )
+        await custom_embed.edit(embed=mod_embed)  # Edit the initialising embed - Mod section (retain reactions from last).
+
+        # Mod section of embed (edit)
+        try:
+            reacting, confirm_user = await ctx.bot.wait_for('reaction_add', timeout=30.0, check=check)
+        except asyncio.TimeoutError:
+            await ctx.send("`Took too long! Neglecting mod response...`")  # If user takes too long - timeout.
+
+        if reacting.emoji == "\U00002B06":  # If the .emoji is the up-arrow...
+            mods_bool = True  # Make mods_bool True in order to implement mods to the embed.
+        elif reacting.emoji == '\U00002B07':
+            mods_bool = False
+        else:
+            mods_bool = False
+
+        # Mod section of embed
+        if mods_bool:
+
+            await ctx.send("`Mention a list of the current moderators - delimited by commas.`")
+
+            try:
+                mods_list = await ctx.bot.wait_for('message', timeout=30.0, check=channel_check)
+            except asyncio.TimeoutError:
+                await ctx.send("`Took too long! Neglecting mod list response...`")  # If user takes too long - timeout.
+
+            try:
+                mods_list = [x.strip() for x in mods_list.content.split(",")]
+                print(mods_list)
+            except asyncio.TimeoutError:
+                error_embed = discord.Embed(  # Error embed
+                    title="Error!",
+                    colour=0xe74c3c
+                )
+                error_embed.add_field(
+                    name=f"{prefixes[str(ctx.guild.id)]}createmodlist",
+                    value=f"`Ensure the list of moderators given is separated by commas and the list is not empty.`",
+                    inline=False
+                )
+                await ctx.send(embed=error_embed)
+                return
+
+            await ctx.send("`Is there a specific name for the moderation team? [Y/N]`")
+
+            try:
+                mod_name = await ctx.bot.wait_for('message', timeout=30.0, check=channel_check)
+            except asyncio.TimeoutError:
+                await ctx.send("`Took too long! Neglecting custom mod team name...`")  # If user takes too long - timeout.
+                mod_name = None
+
+            if "y" in mod_name.content.lower():
+                await ctx.send("`Enter the name of the moderation team:`")
+                mod_name = await ctx.bot.wait_for('message', timeout=30.0, check=channel_check)
+                mod_name = mod_name.content
+            else:
+                mod_name = "Moderators"
+
+            str_mods = ""
+
+            for mod in mods_list:
+                str_mods += f"{mod}\n"
+
+            final_mod_embed.add_field(  # Add mod section (string of mods/mod name)
+                name=mod_name,
+                value=str_mods,
+                inline=False
+            )
+        else:
+            mod_name = None
+            str_mods = None
+
+        await ctx.send(embed=final_mod_embed)
+
+        if admin_name is not None or mod_name is not None:  # Write the file if at least one section is filled in.
+            try:  # See if there is already a pre-existing file.
+
+                lines = []
+                with open('mod-teams.csv', 'r') as read:
+                    reader = csv.reader(read)
+
+                    for row in reader:
+
+                        try:
+                            if row[0] != str(ctx.guild.id):  # Remove any pre-existing moderator list entries
+                                lines.append(row)
+                        except:
+                            pass
+
+                with open('mod-teams.csv', 'w') as mod_file:
+
+                    writer = csv.writer(mod_file)
+                    writer.writerows(lines)  # Add all the other moderator lists from other servers.
+
+                    # Add on the current server's updated moderator list.
+                    write = csv.writer(mod_file, delimiter=",")
+                    write.writerow([ctx.guild.id, str(admin_name), str(str_admins), str(mod_name),
+                                    str(str_mods), colour_hex, team_name])  # Write the guild ID and mod embed to the CSV file.
+
+            except FileNotFoundError:  # If not, create one.
+                with open("mod-teams.csv", "w") as mod_file:
+                    write = csv.writer(mod_file, delimiter=",")
+                    write.writerow([ctx.guild.id, str(admin_name), str(str_admins), str(mod_name), str(str_mods), colour_hex, team_name])  # .content for discord.Message class.
+        else:
+            error_embed = discord.Embed(  # Error embed
+                title="Error!",
+                colour=0xe74c3c
+            )
+            error_embed.add_field(
+                name="Moderation list not saved...",
+                value="`Empty`",
+                inline=False
+            )
+            await ctx.send(embed=error_embed)
+
+    @commands.command(brief="Edits a pre-existing moderation list embed with the current one", description="Edits and updates a pre-existing moderation list embed of a given message ID with the current updated moderation list.", usage="[message ID]")
+    async def editmodlist(self, ctx, message_id=None):
+
+        global prefixes, edit_embed
+
+        if message_id is None:
+            error_embed = discord.Embed(  # Error embed
+                title="Error!",
+                colour=0xe74c3c
+            )
+            error_embed.add_field(
+                name="No message ID provided!",
+                value=f"`{prefixes[str(ctx.guild.id)]}editmodlist [message ID]`",
+                inline=False
+            )
+
+            await ctx.send(embed=error_embed)
+            return
+
+        try:  # Try to open the file.
+            with open("mod-teams.csv",
+                      "r+") as read_mods:  # Open and read the mod-teams.csv file, containing the mod list.
+                reader = csv.reader(read_mods)
+
+                sent = False
+
+                for server in reader:
+                    print(server)
+                    try:
+                        if server[0] == str(ctx.guild.id):  # If the server ID matches the current server.
+                            sent = True
+
+                            try:
+                                if server[5] is not None:  # If there is a custom colour for embed...
+                                    if server[6] is not None:
+                                        edit_embed = discord.Embed(
+                                            title=server[6],
+                                            colour=discord.Colour(int(server[5]))
+                                        )
+                                    else:
+                                        edit_embed = discord.Embed(
+                                            title="Discord Moderation Team",
+                                            colour=discord.Colour(int(server[5]))
+                                        )
+                                else:
+                                    if server[6] is not None:
+                                        edit_embed = discord.Embed(
+                                            title=server[6],
+                                            colour=0x7289DA
+                                        )
+                                    else:
+                                        edit_embed = discord.Embed(
+                                            title="Discord Moderation Team",
+                                            colour=0x7289DA
+                                        )
+                            except:
+                                edit_embed = discord.Embed(
+                                    title="Discord Moderation Team",
+                                    colour=0x7289DA
+                                )
+
+                            if server[1] == "None" or server[2] == "None":  # If there is no admin team (None - string)
+                                pass
+                            else:
+                                edit_embed.add_field(  # Admin List
+                                    name=server[1],
+                                    value=server[2],
+                                    inline=False
+                                )
+
+                            if server[3] == "None" or server[4] == "None":  # If there is no mod team (None - string)
+                                pass
+                            else:
+                                edit_embed.add_field(  # Mod List
+                                    name=server[3],
+                                    value=server[4],
+                                    inline=False
+                                )
+
+                    except IndexError:
+                        continue
+
+                if not sent:  # If no guild ID matches the current guild.
+                    error_embed = discord.Embed(  # Error embed
+                        title="Error!",
+                        colour=0xe74c3c
+                    )
+                    error_embed.add_field(
+                        name="There is no pre-existing moderation list!",
+                        value=f"`{prefixes[str(ctx.guild.id)]}createmodlist`",
+                        inline=False
+                    )
+
+                    await ctx.send(embed=error_embed)
+                    return
+
+        except FileNotFoundError:  # If the file is not found, return an error.
+            error_embed = discord.Embed(  # Error embed
+                title="Error!",
+                colour=0xe74c3c
+            )
+            error_embed.add_field(
+                name="There is no pre-existing moderation list!",
+                value=f"`{prefixes[str(ctx.guild.id)]}createmodlist`",
+                inline=False
+            )
+
+            await ctx.send(embed=error_embed)
+            return
+
+        try:
+            msg_edit = await ctx.fetch_message(message_id)
+            await msg_edit.edit(embed=edit_embed)
+        except:
+            error_embed = discord.Embed(  # Error embed
+                title="Error!",
+                colour=0xe74c3c
+            )
+            error_embed.add_field(
+                name="Invalid message ID provided!",
+                value=f"`{prefixes[str(ctx.guild.id)]}editmodlist [message ID]`",
+                inline=False
+            )
+
+            await ctx.send(embed=error_embed)
+
+        await ctx.message.delete()
+
+    @commands.command(brief="Displays the current moderation team",
+                      description="Lists the current moderation team (with their respective time zones).",
+                      aliases=["mods", "team", "admins"])
+    async def moderators(self, ctx):
+
+        global prefixes
+
+        try:  # Try to open the file.
+            with open("mod-teams.csv",
+                      "r+") as read_mods:  # Open and read the mod-teams.csv file, containing the mod list.
+                reader = csv.reader(read_mods)
+
+                sent = False
+
+                for server in reader:
+                    print(server)
+                    try:
+                        if server[0] == str(ctx.guild.id):  # If the server ID matches the current server.
+                            sent = True
+
+                            try:
+                                if server[5] is not None:  # If there is a custom colour for embed...
+                                    if server[6] is not None:
+                                        server_mod_embed = discord.Embed(
+                                            title=server[6],
+                                            colour=discord.Colour(int(server[5]))
+                                        )
+                                    else:
+                                        server_mod_embed = discord.Embed(
+                                            title="Discord Moderation Team",
+                                            colour=discord.Colour(int(server[5]))
+                                        )
+                                else:
+                                    if server[6] is not None:
+                                        server_mod_embed = discord.Embed(
+                                            title=server[6],
+                                            colour=0x7289DA
+                                        )
+                                    else:
+                                        server_mod_embed = discord.Embed(
+                                            title="Discord Moderation Team",
+                                            colour=0x7289DA
+                                        )
+                            except:
+                                server_mod_embed = discord.Embed(
+                                    title="Discord Moderation Team",
+                                    colour=0x7289DA
+                                )
+
+                            if server[1] == "None" or server[2] == "None":  # If there is no admin team (None - string)
+                                pass
+                            else:
+                                server_mod_embed.add_field(  # Admin List
+                                    name=server[1],
+                                    value=server[2],
+                                    inline=False
+                                )
+
+                            if server[3] == "None" or server[4] == "None":  # If there is no mod team (None - string)
+                                pass
+                            else:
+                                server_mod_embed.add_field(  # Mod List
+                                    name=server[3],
+                                    value=server[4],
+                                    inline=False
+                                )
+
+                            await ctx.send(embed=server_mod_embed)  # Send embed with mod field (and/or admin field).
+                    except IndexError:
+                        continue
+
+                if not sent:  # If no guild ID matches the current guild.
+                    error_embed = discord.Embed(  # Error embed
+                        title="Error!",
+                        colour=0xe74c3c
+                    )
+                    error_embed.add_field(
+                        name="There is no pre-existing moderation list!",
+                        value=f"`{prefixes[str(ctx.guild.id)]}createmodlist`",
+                        inline=False
+                    )
+
+                    await ctx.send(embed=error_embed)
+
+        except FileNotFoundError:  # If the file is not found, return an error.
+            error_embed = discord.Embed(  # Error embed
+                title="Error!",
+                colour=0xe74c3c
+            )
+            error_embed.add_field(
+                name="There is no pre-existing moderation list!",
+                value=f"`{prefixes[str(ctx.guild.id)]}createmodlist`",
+                inline=False
+            )
+
+            await ctx.send(embed=error_embed)
 
     # Muting a user (voice chat) through a role with restrictions.
-    @client.command(brief="Server mutes a user (voice chat)", description="Mutes a user via voice chat.",
-                    usage="[user]")
+    @commands.command(brief="Server mutes a user (voice chat)", description="Mutes a user via voice chat.",
+                      usage="[user]")
     @is_me()
     async def vcmute(self, ctx, user: discord.Member):
         muted_role = discord.utils.get(user.guild.roles, name="Muted")
@@ -156,7 +682,7 @@ class Moderation(commands.Cog, name="moderation"):
                         continue
                     else:
                         index = m_ids.index(line)
-                        for section in m_ids[index:index+4]:  # Write the whole section [index:index+4] - 4 lines.
+                        for section in m_ids[index:index + 4]:  # Write the whole section [index:index+4] - 4 lines.
                             unmuting.write(section)
 
     @commands.Cog.listener()
@@ -176,10 +702,6 @@ class Moderation(commands.Cog, name="moderation"):
 
         if message.content.startswith("`__pycach`"):
             await message.delete()
-
-        if message.author.id == 338406004356022283 and id_check == True:  # Makes sure the author is (Royce) and that
-            # the response is validated.
-            await message.channel.send("Royce's ID: 338406004356022283")
 
         if message.author.id in mute_ids:
             await message.delete()

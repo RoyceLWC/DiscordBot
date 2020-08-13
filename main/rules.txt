@@ -1,0 +1,16 @@
+Spamming:
+Do not commit any form of spamming using text, images or emotes e.g. mic-spamming, mass-tagging, many consecutive messages, etc.
+Harassment:
+Do not harass, impersonate, or bully members and drivers; this includes the use of offensive slurs.
+Private Matters:
+Do not discuss anything confidential or sensitive with another user in public; keep it in DMs.
+Doxxing
+Do not release any private information about another user without their permission. Information that the user had sent publicly within the server in the past is fair game.
+Evasion:
+Do not leave/rejoin the server in order to bypass a moderator or admin’s decision; this includes ban evasions or the use of alt-accounts.
+Explicit/Illegal Content:
+Do not send explicit or illegal images/links that include nudity, overt sexual imagery, morbidity, or anything that conflicts with Discord's Terms of Service or any copyrighted material/illegal content. This criteria also applies to profile pictures and statuses.
+Malicious Messages:
+Do not exploit other users by sending malicious/spoofed links or messages in the server or via DMs that specifically cause problems with Discord clients/computers and/or obtains sensitive information.
+Advertising:
+Do not send links or images related to other communities, Discord servers, or websites with the intent of recruitment or promotion.

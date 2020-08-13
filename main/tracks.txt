@@ -1,0 +1,66 @@
+Austria | Red Bull Ring
+Red Bull Ring
+Spielberg, Austria
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Flags%2016x9/austria-flag.png.transform/2col/image.png
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Austria_Circuit.png.transform/9col/image.png
+1970
+71
+4.318
+306.452
+1:06.957
+[Kimi Räikkönen, 2018]
+Hungary | Hungaroring
+Hungaroring
+Mogyoród, Hungary
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Flags%2016x9/hungary-flag.png.transform/2col/image.png
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Hungary_Circuit.png.transform/7col/image.png
+1986
+70
+4.381
+306.63
+1:17.103
+[Max Verstappen, 2019]
+Great Britain | Silverstone Circuit
+Silverstone Circuit
+Towcester, United Kingdom
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Flags%2016x9/great-britain-flag.png.transform/2col/image.png
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Great_Britain_Circuit.png.transform/7col/image.png
+1950
+52
+5.891
+306.198
+1:27.369
+[Lewis Hamilton, 2019]
+Spain | Circuit de Barcelona-Catalunya
+Circuit de Barcelona-Catalunya
+Montmeló, Catalonia, Spain
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Flags%2016x9/spain-flag.png.transform/2col/image.png
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Spain_Circuit.png.transform/7col/image.png
+1991
+66
+4.655
+307.104
+1:18.441
+[Daniel Ricciardo, 2018]
+Belgium | Circuit de Spa-Francorchamps
+Circuit de Spa-Francorchamps
+Stavelot, Belgium
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Flags%2016x9/belgium-flag.png.transform/1col/image.png
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Belgium_Circuit.png.transform/7col/image.png
+1950
+44
+7.004
+308.052
+1:46.286
+[Valtteri Bottas, 2018]
+Italy | Autodromo Nazionale Monza
+Autodromo Nazionale Monza
+Monza, Italy
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Flags%2016x9/italy-flag.png.transform/1col/image.png
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Italy_Circuit.png.transform/7col/image.png
+1950
+53
+5.793
+306.72
+1:21.046
+[Rubens Barrichello, 2004]
