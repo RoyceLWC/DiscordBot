@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bbfced02-6a70-49b3-96da-1142f027360b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/royce.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/royce.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/f1.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/f1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cogs/moderation.py" beforeDir="false" afterPath="$PROJECT_DIR$/cogs/moderation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tracks.txt" beforeDir="false" afterPath="$PROJECT_DIR$/tracks.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upcoming.txt" beforeDir="false" afterPath="$PROJECT_DIR$/upcoming.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -74,8 +69,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cogs/f1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-807">
-              <caret line="555" column="100" selection-start-line="555" selection-start-column="100" selection-end-line="555" selection-end-column="100" />
+            <state relative-caret-position="536">
+              <caret line="616" column="118" selection-start-line="616" selection-start-column="118" selection-end-line="616" selection-end-column="118" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -138,11 +133,6 @@
               <caret line="22" selection-start-line="22" selection-end-line="22" />
             </state>
           </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/mutedids.txt">
-          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
@@ -523,12 +513,12 @@
       <workItem from="1597249401586" duration="5770000" />
       <workItem from="1597279389503" duration="8264000" />
       <workItem from="1597348356870" duration="4616000" />
-      <workItem from="1597367953386" duration="2620000" />
+      <workItem from="1597367953386" duration="4094000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="442254000" />
+    <option name="totallyTimeSpent" value="443728000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
@@ -797,8 +787,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cogs/f1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-807">
-          <caret line="555" column="100" selection-start-line="555" selection-start-column="100" selection-end-line="555" selection-end-column="100" />
+        <state relative-caret-position="536">
+          <caret line="616" column="118" selection-start-line="616" selection-start-column="118" selection-end-line="616" selection-end-column="118" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>
