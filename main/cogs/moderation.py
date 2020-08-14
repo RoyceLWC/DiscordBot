@@ -276,7 +276,7 @@ class Moderation(commands.Cog, name="moderation"):
                     colour=0xe74c3c
                 )
                 error_embed.add_field(
-                    name=f"{prefixes[str(ctx.guild.id)]}createmodlist",
+                    name=f"{prefixes[str(ctx.guild.id)][0]}createmodlist",
                     value=f"`Ensure the list of moderators given is separated by commas and the list is not empty.`",
                     inline=False
                 )
@@ -367,7 +367,7 @@ class Moderation(commands.Cog, name="moderation"):
             )
             error_embed.add_field(
                 name="No message ID provided!",
-                value=f"`{prefixes[str(ctx.guild.id)]}editmodlist [message ID]`",
+                value=f"`{prefixes[str(ctx.guild.id)][0]}editmodlist [message ID]`",
                 inline=False
             )
 
@@ -444,7 +444,7 @@ class Moderation(commands.Cog, name="moderation"):
                     )
                     error_embed.add_field(
                         name="There is no pre-existing moderation list!",
-                        value=f"`{prefixes[str(ctx.guild.id)]}createmodlist`",
+                        value=f"`{prefixes[str(ctx.guild.id)][0]}createmodlist`",
                         inline=False
                     )
 
@@ -458,7 +458,7 @@ class Moderation(commands.Cog, name="moderation"):
             )
             error_embed.add_field(
                 name="There is no pre-existing moderation list!",
-                value=f"`{prefixes[str(ctx.guild.id)]}createmodlist`",
+                value=f"`{prefixes[str(ctx.guild.id)][0]}createmodlist`",
                 inline=False
             )
 
@@ -475,7 +475,7 @@ class Moderation(commands.Cog, name="moderation"):
             )
             error_embed.add_field(
                 name="Invalid message ID provided!",
-                value=f"`{prefixes[str(ctx.guild.id)]}editmodlist [message ID]`",
+                value=f"`{prefixes[str(ctx.guild.id)][0]}editmodlist [message ID]`",
                 inline=False
             )
 
@@ -561,7 +561,7 @@ class Moderation(commands.Cog, name="moderation"):
                     )
                     error_embed.add_field(
                         name="There is no pre-existing moderation list!",
-                        value=f"`{prefixes[str(ctx.guild.id)]}createmodlist`",
+                        value=f"`{prefixes[str(ctx.guild.id)][0]}createmodlist`",
                         inline=False
                     )
 
@@ -574,7 +574,7 @@ class Moderation(commands.Cog, name="moderation"):
             )
             error_embed.add_field(
                 name="There is no pre-existing moderation list!",
-                value=f"`{prefixes[str(ctx.guild.id)]}createmodlist`",
+                value=f"`{prefixes[str(ctx.guild.id)][0]}createmodlist`",
                 inline=False
             )
 
