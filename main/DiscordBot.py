@@ -933,7 +933,7 @@ async def nhelp(ctx, cog="all"):
                 general_cog_commands_list.append(commands_list)  # Add the list of commands for each cog to the list (indexed).
 
             except AttributeError:
-                pass
+                general_cog_commands_list.append(None)
 
         # General commands
         general_commands = ""
@@ -998,21 +998,28 @@ async def nhelp(ctx, cog="all"):
                         colour=0x7289DA
                     )
 
-                    next_help_embed.add_field(
-                        name=general_cogs_list[index],
-                        value=general_cog_commands_list[index],
-                        inline=False
-                    )
+                    if cog_status[general_cogs_list[index].lower()]:  # If the cog is loaded
+                        next_help_embed.add_field(
+                            name=general_cogs_list[index],
+                            value=general_cog_commands_list[index],
+                            inline=False
+                        )
+
+                    else:
+                        next_help_embed.add_field(
+                            name=general_cogs_list[index],
+                            value=f"This cog is not loaded; please load this cog first to view its commands.\n`{prefixes[str(ctx.guild.id)][0]}load {general_cogs_list[index].lower()}`"
+                        )
 
                     next_help_embed.set_footer(
-                        text=f"Page {index+1}/5 • Requested by {ctx.message.author.name}",
+                        text=f"Page {index + 1}/5 • Requested by {ctx.message.author.name}",
                         icon_url=client.user.avatar_url
                     )
 
                     await initial_help.edit(embed=next_help_embed)
 
             elif reacting.emoji == "\U000027a1":  # Next help page
-                if index == 4:  # Final page
+                if index == 5:  # Final page
                     continue
                 else:
                     index += 1  # Next index (cog)
@@ -1022,14 +1029,21 @@ async def nhelp(ctx, cog="all"):
                         colour=0x7289DA
                     )
 
-                    next_help_embed.add_field(
-                        name=general_cogs_list[index],
-                        value=general_cog_commands_list[index],
-                        inline=False
-                    )
+                    if cog_status[general_cogs_list[index].lower()]:  # If the cog is loaded
+                        next_help_embed.add_field(
+                            name=general_cogs_list[index],
+                            value=general_cog_commands_list[index],
+                            inline=False
+                        )
+
+                    else:
+                        next_help_embed.add_field(
+                            name=general_cogs_list[index],
+                            value=f"This cog is not loaded; please load this cog first to view its commands.\n`{prefixes[str(ctx.guild.id)][0]}load {general_cogs_list[index].lower()}`"
+                        )
 
                     next_help_embed.set_footer(
-                        text=f"Page {index+1}/5 • Requested by {ctx.message.author.name}",
+                        text=f"Page {index + 1}/6 • Requested by {ctx.message.author.name}",
                         icon_url=client.user.avatar_url
                     )
 
@@ -1147,12 +1161,15 @@ async def on_ready():
             pass
 
         else:
-            if not cog_status[file[:-3]]:
-                client.load_extension(f"cogs.{file[:-3]}")
-                cog_count += 1  # Add 1 (total) to the cog count to indicate how many cogs have been loaded.
-            elif cog_status[file[:-3]]:
-                continue
-            else:
+            try:
+                if not cog_status[file[:-3]]:
+                    client.load_extension(f"cogs.{file[:-3]}")
+                    cog_count += 1  # Add 1 (total) to the cog count to indicate how many cogs have been loaded.
+                elif cog_status[file[:-3]]:
+                    continue
+                else:
+                    continue
+            except:  # __pycach
                 continue
 
     # Loop through each value and set it to True (loaded).
