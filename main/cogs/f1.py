@@ -96,7 +96,7 @@ class F1(commands.Cog, name="f1"):
             )
             error_embed.add_field(
                 name="No timezone match found!",
-                value=f"`{prefixes[str(ctx.guild.id)]}settimezone [TZ database name*]`",
+                value=f"`{prefixes[str(ctx.guild.id)][0]}settimezone [TZ database name*]`",
                 inline=False
             )
             error_embed.set_footer(text="*More info: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones")
@@ -260,7 +260,7 @@ class F1(commands.Cog, name="f1"):
                 )
                 error_embed.add_field(
                     name="Inputs failed! Try again...",
-                    value=f"`{prefixes[str(ctx.guild.id)]}editupcoming [message ID]`",
+                    value=f"`{prefixes[str(ctx.guild.id)][0]}editupcoming [message ID]`",
                     inline=False
                 )
                 await ctx.send(embed=error_embed)
@@ -312,8 +312,12 @@ class F1(commands.Cog, name="f1"):
                                  value=f"{str(responses[12]).split('/')[1]} | {responses[8]}", inline=True)
 
         # Getting track info
-        with open("tracks.txt", "r+", encoding="utf-8") as read_tracks:
-            lines_n = read_tracks.readlines()
+        try:
+            with open("tracks.txt", "r+", encoding="utf-8") as read_tracks:
+                lines_n = read_tracks.readlines()
+        except:
+            with open("tracks.txt", "r+", encoding="latin-1") as read_tracks:
+                lines_n = read_tracks.readlines()
 
         lines = []
 
@@ -334,7 +338,7 @@ class F1(commands.Cog, name="f1"):
         info += f"**Race Distance**: `{lines[index + 8]}km`\n"
         info += f"**Lap Record**: `{lines[index + 9]}` {lines[index + 10]}\n"
 
-        upcoming_embed.add_field(name="───Track Info:───", value=f"{info}\n**{responses[10][:-1]}:**", inline=False)
+        upcoming_embed.add_field(name="───Track Info:───", value=f"{info}\n**{responses[10].rstrip()}:**", inline=False)
 
         await ctx.send(embed=upcoming_embed)
 
@@ -349,7 +353,7 @@ class F1(commands.Cog, name="f1"):
         )
         success_embed.add_field(
             name="The upcoming F1 race embed has been saved.",
-            value=f"Use `{prefixes[str(ctx.guild.id)]}upcoming` to view the embed.",
+            value=f"Use `{prefixes[str(ctx.guild.id)][0]}upcoming` to view the embed.",
             inline=False
         )
 
@@ -367,15 +371,19 @@ class F1(commands.Cog, name="f1"):
             )
             error_embed.add_field(
                 name="Invalid message ID provided!",
-                value=f"`{prefixes[str(ctx.guild.id)]}editupcoming [message ID]`",
+                value=f"`{prefixes[str(ctx.guild.id)][0]}editupcoming [message ID]`",
                 inline=False
             )
 
             await ctx.send(embed=error_embed)
             return
 
-        with open("upcoming.txt", "r+", encoding="utf-8") as read_upcoming:  # Open the upcoming.txt and create a list with each line to substitute into each embed field.
-            responses = read_upcoming.readlines()
+        try:
+            with open("upcoming.txt", "r+", encoding="utf-8") as read_upcoming:  # Open the upcoming.txt and create a list with each line to substitute into each embed field.
+                responses = read_upcoming.readlines()
+        except:
+            with open("upcoming.txt", "r+", encoding="latin-1") as read_upcoming:  # Latin-1 encoding for "ñ" and other latin characters in track/GP names.
+                responses = read_upcoming.readlines()
 
         upcoming_embed = discord.Embed(
             title=responses[0],
@@ -445,7 +453,7 @@ class F1(commands.Cog, name="f1"):
         info += f"**Race Distance**: `{lines[index + 8]}km`\n"
         info += f"**Lap Record**: `{lines[index + 9]}` {lines[index + 10]}\n"
 
-        upcoming_embed.add_field(name="───Track Info:───", value=f"{info}\n**{responses[10][:-1]}:**", inline=False)
+        upcoming_embed.add_field(name="───Track Info:───", value=f"{info}\n**{responses[10].rstrip()}:**", inline=False)
 
         msg = await ctx.fetch_message(user_id)
         await msg.edit(embed=upcoming_embed)
@@ -463,8 +471,12 @@ class F1(commands.Cog, name="f1"):
         with open("timezones.json", "r") as user_timezones:
             timezones_dict = json.load(user_timezones)
 
-        with open("upcoming.txt", "r+", encoding="utf-8") as read_upcoming:  # Open the upcoming.txt and create a list with each line to substitute into each embed field.
-            responses = read_upcoming.readlines()
+        try:
+            with open("upcoming.txt", "r+", encoding="utf-8") as read_upcoming:  # Open the upcoming.txt and create a list with each line to substitute into each embed field.
+                responses = read_upcoming.readlines()
+        except:
+            with open("upcoming.txt", "r+", encoding="latin-1") as read_upcoming:  # Latin-1 encoding for "ñ" and other latin characters in track/GP names.
+                responses = read_upcoming.readlines()
 
         # Setting up timezone adjustments
 
@@ -541,7 +553,7 @@ class F1(commands.Cog, name="f1"):
         upcoming_embed.add_field(name=f"**Race | {race_time.strftime('%a').upper()}**", value=f"`{responses[6]}`", inline=True)
         upcoming_embed.add_field(name=f"[Track Time]", value=f"{str(responses[12][:-1]).split('/')[1]} | {responses[8][:-1]}", inline=True)
 
-        upcoming_embed.add_field(name="───Track Info:───", value=f"{info}\n**{responses[10][:-1]}:**", inline=False)
+        upcoming_embed.add_field(name="───Track Info:───", value=f"{info}\n**{responses[10].rstrip()}:**", inline=False)
 
         if str(ctx.author.id) in timezones_dict:  # If user has set their timezone.
             upcoming_embed.set_footer(text=f"React to convert track times to your local time [clock emoji].")
@@ -602,7 +614,7 @@ class F1(commands.Cog, name="f1"):
                                                        value=str(timezones_dict[str(ctx.author.id)]).split('/')[0],
                                                        inline=True)
 
-                    local_upcoming_embed.add_field(name="───Track Info:───", value=f"{info}\n**{responses[10][:-1]}:**", inline=False)
+                    local_upcoming_embed.add_field(name="───Track Info:───", value=f"{info}\n**{responses[10].rstrip()}:**", inline=False)
 
                     local_upcoming_embed.set_footer(text="React to convert local time back to track time [racecar emoji].")
 
@@ -625,12 +637,12 @@ class F1(commands.Cog, name="f1"):
                 colour=0xe74c3c
             )
             error_embed.add_field(
-                name="No track procided!.",
-                value=f"`{prefixes[str(ctx.guild.id)]}track [circuit name/country]`",
+                name="No track provided!.",
+                value=f"`{prefixes[str(ctx.guild.id)][0]}track [circuit name/country]`",
                 inline=False
             )
             error_embed.set_footer(
-                text=f"To view the all the available circuits, type {prefixes[str(ctx.guild.id)]}tracks."
+                text=f"To view the all the available circuits, type {prefixes[str(ctx.guild.id)][0]}tracks."
             )
             await ctx.send(embed=error_embed)
             return
@@ -666,11 +678,11 @@ class F1(commands.Cog, name="f1"):
             )
             error_embed.add_field(
                 name=error_string,
-                value=f"`{prefixes[str(ctx.guild.id)]}track [circuit name/country]`",
+                value=f"`{prefixes[str(ctx.guild.id)][0]}track [circuit name/country]`",
                 inline=False
             )
             error_embed.set_footer(
-                text=f"To view the all the available tracks, type {prefixes[str(ctx.guild.id)]}tracks."
+                text=f"To view the all the available tracks, type {prefixes[str(ctx.guild.id)][0]}tracks."
             )
             await ctx.send(embed=error_embed)
             return
@@ -686,7 +698,7 @@ class F1(commands.Cog, name="f1"):
 
         print(lines[index+4])
 
-        track_embed.set_footer(text=f"Last updated: 03/07/2020")
+        track_embed.set_footer(text=f"Last updated: 14/08/2020")
         track_embed.set_image(
             url=str(lines[index+4]))
         track_embed.set_thumbnail(
@@ -705,15 +717,6 @@ class F1(commands.Cog, name="f1"):
         info += f"**Lap Record**: `{lines[index+9]}` {lines[index+10]}\n"
 
         track_embed.add_field(name="───Track Info:───", value=info, inline=False)
-
-        """
-        track_embed.add_field(name="───────────────", value="__**Track Info:**__", inline=False)
-        track_embed.add_field(name="**First Grand Prix**", value=f"`{lines[index+5]}`", inline=True)
-        track_embed.add_field(name="**Number of Laps**", value=f"`{lines[index+6]}`", inline=True)
-        track_embed.add_field(name="**Circuit Length**", value=f"`{lines[index+7]}km`", inline=True)
-        track_embed.add_field(name=f"**Race Distance [{now.year}]**", value=f"`{lines[index+8]}km`", inline=True)
-        track_embed.add_field(name="**Lap Record**", value=f"`{lines[index+9]}` {lines[index+10]}", inline=True)
-        """
 
         await ctx.send(embed=track_embed)
 
@@ -736,18 +739,16 @@ class F1(commands.Cog, name="f1"):
             tracks += f"`{line}`\n"
 
         track_embed = discord.Embed(
-            title="───────────────",
+            description=tracks,
             colour=0xe74c3c
 
         )
 
-        track_embed.set_footer(text=f"Last updated: 03/07/2020")
+        track_embed.set_footer(text=f"Last updated: 14/08/2020")
         track_embed.set_author(
             name="► F1 2020 | Circuits",
             icon_url="https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/F1.svg/1280px-F1.svg.png"
         )
-
-        track_embed.add_field(name=tracks, value="─────────────────", inline=False)
 
         await ctx.send(embed=track_embed)
 

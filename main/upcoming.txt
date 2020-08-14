@@ -1,13 +1,13 @@
-Emirates Formula 1 70th Anniversary Grand Prix 2020 - Great Britain
-Round 5 | 07 - 09 AUG
+Formula 1 Aramco Gran Premio De España 2020 - Spain
+Round 6 | 14 - 16 AUG
 11:00 - 12:30
 15:00 - 16:30
-11:00 - 12:00
-14:00 - 15:00
-14:10 - 16:10
-https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Flags%2016x9/united-kingdom-flag.png.transform/1col/image.png
-GMT+1
-https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Great_Britain_Circuit.png.transform/7col/image.png
-Silverstone Circuit
-2020/08/07
-Europe/London
+12:00 - 13:00
+15:00 - 16:00
+15:10 - 17:10
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Flags%2016x9/spain-flag.png.transform/2col/image.png
+GMT+2
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Spain_Circuit.png.transform/7col/image.png
+Circuit de Barcelona-Catalunya
+2020/08/14
+Europe/Madrid

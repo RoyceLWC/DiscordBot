@@ -64,3 +64,47 @@ https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20
 306.72
 1:21.046
 [Rubens Barrichello, 2004]
+Italy | Autodromo Internazionale del Mugello
+Autodromo Internazionale del Mugello
+Tuscany, Italy
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Flags%2016x9/italy-flag.png.transform/1col/image.png
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Tuscany_Circuit.png.transform/7col/image.png
+2020
+59
+5.245
+309.455
+Null
+[Null]
+Russia | Sochi Autodrom
+Sochi Autodrom
+Krasnodar Krai, Russia
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Flags%2016x9/russia-flag.png.transform/1col/image.png
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Russia_Circuit.png.transform/7col/image.png
+2014
+53
+5.848
+309.745
+1:35.761
+[Lewis Hamilton, 2019]
+Germany | Nürburgring
+Nürburgring
+Nürburg, Germany
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Flags%2016x9/germany-flag.png.transform/1col/image.png
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Germany_Circuit.png.transform/7col/image.png
+1951
+60
+5.148
+308.623
+1:29.468
+[Michael Schumacher, 2004]
+Portugal | Autódromo Internacional do Algarve
+Autódromo Internacional do Algarve
+Portimão, Portugal
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Flags%2016x9/portugal-flag.png.transform/1col/image.png
+https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Portugal_Circuit.png.transform/7col/image.png
+2020
+66
+4.684
+308.877
+Null
+[Null]
