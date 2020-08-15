@@ -998,21 +998,28 @@ async def nhelp(ctx, cog="all"):
                         colour=0x7289DA
                     )
 
-                    if cog_status[general_cogs_list[index].lower()]:  # If the cog is loaded
+                    try:
+                        if cog_status[general_cogs_list[index].lower()]:  # If the cog is loaded
+                            next_help_embed.add_field(
+                                name=general_cogs_list[index],
+                                value=general_cog_commands_list[index],
+                                inline=False
+                            )
+
+                        else:
+                            next_help_embed.add_field(
+                                name=general_cogs_list[index],
+                                value=f"This cog is not loaded; please load this cog first to view its commands.\n`{prefixes[str(ctx.guild.id)][0]}load {general_cogs_list[index].lower()}`"
+                            )
+                    except KeyError:  # If the page is general
                         next_help_embed.add_field(
                             name=general_cogs_list[index],
                             value=general_cog_commands_list[index],
                             inline=False
                         )
 
-                    else:
-                        next_help_embed.add_field(
-                            name=general_cogs_list[index],
-                            value=f"This cog is not loaded; please load this cog first to view its commands.\n`{prefixes[str(ctx.guild.id)][0]}load {general_cogs_list[index].lower()}`"
-                        )
-
                     next_help_embed.set_footer(
-                        text=f"Page {index + 1}/5 • Requested by {ctx.message.author.name}",
+                        text=f"Page {index + 1}/6 • Requested by {ctx.message.author.name}",
                         icon_url=client.user.avatar_url
                     )
 
