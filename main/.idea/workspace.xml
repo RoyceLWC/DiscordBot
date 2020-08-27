@@ -9,7 +9,9 @@
       <change beforePath="$PROJECT_DIR$/DiscordBot.py" beforeDir="false" afterPath="$PROJECT_DIR$/DiscordBot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Procfile" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/gitignore.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/prefixes.json" beforeDir="false" afterPath="$PROJECT_DIR$/prefixes.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/upcoming.txt" beforeDir="false" afterPath="$PROJECT_DIR$/upcoming.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,7 +21,7 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/DiscordBotV3$Discord_Bot.coverage" NAME="Discord Bot Coverage Results" MODIFIED="1586734067524" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/venv" />
-    <SUITE FILE_PATH="coverage/DiscordBot$DiscordBot.coverage" NAME="DiscordBot Coverage Results" MODIFIED="1597449607998" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/DiscordBot$DiscordBot.coverage" NAME="DiscordBot Coverage Results" MODIFIED="1598063364175" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/DiscordBot$Discord_Bot.coverage" NAME="Discord Bot Coverage Results" MODIFIED="1590540910011" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/DiscordBotV3$BSN_Market.coverage" NAME="BSN Market Coverage Results" MODIFIED="1585936011268" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/venv" />
     <SUITE FILE_PATH="coverage/DiscordBot$music.coverage" NAME="music Coverage Results" MODIFIED="1586891810408" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/venv/cogs" />
@@ -40,10 +42,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DiscordBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="416">
+            <state relative-caret-position="17187">
               <caret line="1018" column="25" selection-start-line="1018" selection-start-column="25" selection-end-line="1018" selection-end-column="25" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
@@ -55,16 +57,16 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/upcoming.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
+            <state relative-caret-position="221">
+              <caret line="13" selection-start-line="13" selection-end-line="13" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tracks.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1343">
+            <state relative-caret-position="228">
               <caret line="79" column="22" selection-start-line="79" selection-start-column="22" selection-end-line="79" selection-end-column="22" />
             </state>
           </provider>
@@ -150,7 +152,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>track</find>
       <find>aliases</find>
       <find>2020</find>
       <find>9</find>
@@ -180,6 +181,7 @@
       <find>&quot;+&quot;</find>
       <find>overwritten</find>
       <find>prefixes[str(ctx.guild.id)]</find>
+      <find>cog_status</find>
     </findStrings>
     <replaceStrings>
       <replace>async def</replace>
@@ -245,9 +247,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="408" />
-    <option name="y" value="-20" />
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="197" />
+    <option name="y" value="9" />
     <option name="width" value="1710" />
     <option name="height" value="1004" />
   </component>
@@ -257,7 +259,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -274,6 +275,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -519,24 +521,25 @@
       <workItem from="1597279389503" duration="8264000" />
       <workItem from="1597348356870" duration="4616000" />
       <workItem from="1597367953386" duration="8044000" />
-      <workItem from="1597445083281" duration="4085000" />
+      <workItem from="1597445083281" duration="4380000" />
+      <workItem from="1598048274441" duration="693000" />
+      <workItem from="1598063338866" duration="479000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="451763000" />
+    <option name="totallyTimeSpent" value="453230000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="197" y="9" width="1710" height="1004" extended-state="1" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1369936" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15939394" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Concurrent Activities Diagram" weight="0.32936078" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49946696" weight="0.3281412" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.87899786" visible="true" weight="0.16793066" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.87899786" visible="true" weight="0.184845" />
       <window_info anchor="bottom" id="Python Console" order="3" weight="0.3281412" />
       <window_info anchor="bottom" id="Debug" order="4" sideWeight="0.49946696" weight="0.39869988" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
@@ -548,6 +551,7 @@
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5010661" side_tool="true" weight="0.32827735" />
       <window_info anchor="bottom" id="Terminal" order="12" weight="0.3136033" />
       <window_info anchor="bottom" id="SciView" order="13" sideWeight="0.50053304" side_tool="true" weight="0.32917964" />
+      <window_info anchor="bottom" id="Concurrent Activities Diagram" order="14" weight="0.32936078" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -705,7 +709,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/DiscordBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="416">
+        <state relative-caret-position="17187">
           <caret line="1018" column="25" selection-start-line="1018" selection-start-column="25" selection-end-line="1018" selection-end-column="25" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
@@ -715,15 +719,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/upcoming.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="5" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tracks.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1343">
-          <caret line="79" column="22" selection-start-line="79" selection-start-column="22" selection-end-line="79" selection-end-column="22" />
+        <state relative-caret-position="221">
+          <caret line="13" selection-start-line="13" selection-end-line="13" />
         </state>
       </provider>
     </entry>
@@ -781,6 +778,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="22" selection-start-line="22" selection-end-line="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tracks.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="79" column="22" selection-start-line="79" selection-start-column="22" selection-end-line="79" selection-end-column="22" />
         </state>
       </provider>
     </entry>
