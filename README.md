@@ -5,6 +5,13 @@
 # Changelog - Royce's Discord Bot
 All notable changes to this project will be documented in this file.
 
+## [2.1.9] - 2020-08-27 - Removed external cog folder
+### Changed
+- Upcoming.txt (embed) to the Formula 1 Rolex Belgian Grand Prix 2020
+
+### Removed
+- Cog folder outside of main
+
 ## [2.1.8] - 2020-08-15 - Fixed general help embed
 ### Fixed
 - General page not displaying when going to the previous page.
@@ -31,7 +38,6 @@ All notable changes to this project will be documented in this file.
 - youtube_dl requirements [2020.7.28] for Heroku hosting
 
 ## [2.1.3] - 2020-08-14 - Moderation prefixes
-
 ### Fixed
 - Incorrect prefixes being displayed
 
@@ -44,11 +50,11 @@ All notable changes to this project will be documented in this file.
 - Portimão Circuit added
 - Latin-1 encoding
 
-## Changed
+### Changed
 - Tracks embed to respect Discord's character limits (title/name)
 - Upcoming embed (Spanish GP)
 
-## Removed
+### Removed
 - Triple quoted strings of unused functions
 
 ### Fixed
