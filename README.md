@@ -1,5 +1,5 @@
 # Royce's Bot
-## A Discord Bot created by Royce C.
+## A Discord Bot created by myself.
 - Includes cogs with their corresponding commands to support your Discord server.
 
 # Changelog - Royce's Discord Bot
