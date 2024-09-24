@@ -1237,4 +1237,4 @@ async def on_guild_remove(guild):
         json.dump(r_prefixes, f, indent=4)
 
 
-client.run("Njk1MzY2MDM3NDY5OTIxNDU0.XuaQOw.iYqocdVCwEMOyVbrG3CTzuu-Iuc")
+client.run("")
